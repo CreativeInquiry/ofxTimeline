@@ -646,7 +646,9 @@ void ofxTimeline::setCurrentTimeSeconds(float time){
     }
  
 }
-
+float ofxTimeline::getFrameRate(){
+    return timecode.getFPS();
+}
 void ofxTimeline::setCurrentTimeMillis(unsigned long long millis){
 	setCurrentTimeSeconds(millis/1000.);
 }

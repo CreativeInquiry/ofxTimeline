@@ -247,7 +247,7 @@ bool ofxTLSwitches::mousePressed(ofMouseEventArgs& args, long millis){
         if(!ofGetModifierSelection()){
             timeline->unselectAll();
         }
-		if(ofGetModifierSelection() && clickedTextField->textField.isEditing()){
+		if(ofGetModifierSelection() && clickedTextField->textField.getIsEditing()){
 			clickedTextField->textField.endEditing();
 		}
 		else{
@@ -507,7 +507,7 @@ void ofxTLSwitches::mouseReleased(ofMouseEventArgs& args, long millis){
 		else{
 			enteringText = false;
 			for(int i = 0; i < selectedKeyframes.size(); i++){
-				enteringText = enteringText || ((ofxTLSwitch*)selectedKeyframes[i])->textField.isEditing();
+				enteringText = enteringText || ((ofxTLSwitch*)selectedKeyframes[i])->textField.getIsEditing();
 			}
 		}
         
@@ -613,7 +613,7 @@ void ofxTLSwitches::storeKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore){
 
 void ofxTLSwitches::willDeleteKeyframe(ofxTLKeyframe* keyframe){
 	ofxTLSwitch* switchKey = (ofxTLSwitch* )keyframe;
-	if(switchKey->textField.isEditing()){
+	if(switchKey->textField.getIsEditing()){
 		timeline->dismissedModalContent();
 		timeline->flagTrackModified(this);
 	}

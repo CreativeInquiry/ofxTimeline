@@ -281,6 +281,7 @@ class ofxTimeline : ofThread {
 	void setBPM(float bpm);
 	float getBPM();
 	
+    float getFrameRate();
     bool toggleSnapToBPM();
     void enableSnapToBPM(bool enableSnap);
     bool getSnapToBPM();

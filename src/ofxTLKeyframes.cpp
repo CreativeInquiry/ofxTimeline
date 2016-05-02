@@ -718,7 +718,7 @@ string ofxTLKeyframes::getXMLRepresentation(){
 void ofxTLKeyframes::loadFromXMLRepresentation(string rep){
     clear();
     ofxXmlSettings buffer;
-    buffer.loadFromBuffer(rep);
+    buffer.load(rep);
     createKeyframesFromXML(buffer, keyframes);
     updateKeyframeSort();
     timeline->flagUserChangedValue();    //because this is only called in Undo we don't flag track modified
