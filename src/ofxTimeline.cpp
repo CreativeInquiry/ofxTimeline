@@ -659,6 +659,11 @@ void ofxTimeline::setFrameRate(float fps){
 	timecode.setFPS(fps);
 }
 
+float ofxTimeline::getFrameRate(){
+    return timecode.getFPS();
+}
+
+
 void ofxTimeline::setFrameBased(bool frameBased){
     isFrameBased = frameBased;
 }

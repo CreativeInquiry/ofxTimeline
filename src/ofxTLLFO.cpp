@@ -55,7 +55,7 @@ void ofxTLLFO::drawModalContent(){
 	ofPushStyle();
 	ofSetColor(timeline->getColors().disabledColor, 200);
 	
-	ofSetLineWidth(1);
+	ofSetLineWidth(2);
 	ofFill();
 	
 	ofDrawRectangle(sineTypeRect);

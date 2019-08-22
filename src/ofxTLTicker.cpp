@@ -74,7 +74,7 @@ void ofxTLTicker::draw(){
 	        updateBPMPoints();
 		}
         ofPushStyle();
-        ofSetColor(255, 255, 255, 50);
+        ofSetColor(255, 255, 255, 150);
         for(int i = 0; i < bpmScreenPoints.size(); i++){
             ofSetLineWidth(bpmScreenPoints[i].weight);
 			ofDrawLine(bpmScreenPoints[i].screenX, getBottomEdge(), bpmScreenPoints[i].screenX, totalDrawRect.y+totalDrawRect.height);
@@ -110,7 +110,7 @@ void ofxTLTicker::draw(){
         }
 		
 		ofSetColor(timeline->getColors().highlightColor);
-		ofSetLineWidth(1);
+		ofSetLineWidth(2);
 
 		ofDrawLine(screenX, totalDrawRect.y, screenX, totalDrawRect.y+totalDrawRect.height);
 	}
@@ -144,7 +144,7 @@ void ofxTLTicker::draw(){
     }
 	
 	//draw playhead line
-	ofSetLineWidth(1);
+	ofSetLineWidth(2);
 	ofDrawLine(currentFrameX, totalDrawRect.y, currentFrameX, totalDrawRect.y+totalDrawRect.height);
 	//draw bounds 
 	ofNoFill();

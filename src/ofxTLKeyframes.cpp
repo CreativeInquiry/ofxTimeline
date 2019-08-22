@@ -62,17 +62,17 @@ void ofxTLKeyframes::recomputePreviews(){
 
 //	cout << "ofxTLKeyframes::recomputePreviews " << endl;
 
-//	if(keyframes.size() == 0 || keyframes.size() == 1){
-//		preview.addVertex(ofPoint(bounds.x, bounds.y + bounds.height - sampleAtPercent(.5f)*bounds.height));
-//		preview.addVertex(ofPoint(bounds.x+bounds.width, bounds.y + bounds.height - sampleAtPercent(.5f)*bounds.height));
-//	}
-//	else{
+//    if(keyframes.size() == 0 || keyframes.size() == 1){
+//        preview.addVertex(ofPoint(bounds.x, bounds.y + bounds.height - sampleAtPercent(.5f)*bounds.height));
+//        preview.addVertex(ofPoint(bounds.x+bounds.width, bounds.y + bounds.height - sampleAtPercent(.5f)*bounds.height));
+//    }
+//    else{
 		for(int p = bounds.getMinX(); p <= bounds.getMaxX(); p+=2){
 			preview.addVertex(p,  bounds.y + bounds.height - sampleAtPercent(screenXtoNormalizedX(p)) * bounds.height);
 		}
-//	}
+//    }
 //	int size = preview.getVertices().size();
-	preview.simplify();
+    preview.simplify();
 	//cout << "simplify pre " << size << " post: " << preview.getVertices().size() << " dif: " << (size - preview.getVertices().size()) << endl;
 
 	ofVec2f lastPoint;

@@ -162,7 +162,7 @@ void ofxTLTrackHeader::recalculateFooterStripes(){
 		return;
 	}
 	footerStripes.clear();
-	footerStripes.setStrokeWidth(1.0);
+	footerStripes.setStrokeWidth(1);
 
 	for(float l = 0; l < bounds.width; l+=footerHeight){
 		footerStripes.moveTo(l, footerHeight);

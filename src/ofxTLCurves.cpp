@@ -45,9 +45,9 @@ ofxTLCurves::ofxTLCurves(){
 float ofxTLCurves::interpolateValueForKeys(ofxTLKeyframe* start,ofxTLKeyframe* end, unsigned long long sampleTime){
 	ofxTLTweenKeyframe* tweenKeyStart = (ofxTLTweenKeyframe*)start;
 	ofxTLTweenKeyframe* tweenKeyEnd = (ofxTLTweenKeyframe*)end;
-	return ofxTween::map(sampleTime, tweenKeyStart->time, tweenKeyEnd->time,
+	return ofxeasing::map(sampleTime, tweenKeyStart->time, tweenKeyEnd->time,
 						 			 tweenKeyStart->value, tweenKeyEnd->value,
-						 false, *tweenKeyStart->easeFunc->easing, tweenKeyStart->easeType->type);
+                          ofxeasing::easing(tweenKeyStart->easeFunc->easing, tweenKeyStart->easeType->type));
 }
 
 string ofxTLCurves::getTrackType(){
@@ -111,22 +111,23 @@ void ofxTLCurves::drawModalContent(){
 		ofDrawRectangle(easingWindowPosition.x + easingFunctions[i]->bounds.x, easingWindowPosition.y +easingFunctions[i]->bounds.y,
 						easingFunctions[i]->bounds.width, easingFunctions[i]->bounds.height);
         ofSetColor(200, 200, 200);
-//        timeline->getFont().drawString(easingFunctions[i]->name,
-//                           easingWindowPosition.x + easingFunctions[i]->bounds.x+10,
-//                           easingWindowPosition.y + easingFunctions[i]->bounds.y+15);
+        timeline->getFont().drawString(easingFunctions[i]->name,
+                           easingWindowPosition.x + easingFunctions[i]->bounds.x+10,
+                           easingWindowPosition.y + easingFunctions[i]->bounds.y+15);
 		ofPushMatrix();
 		ofTranslate(easingWindowPosition.x + easingFunctions[i]->bounds.x,
 					easingWindowPosition.y + easingFunctions[i]->bounds.y);
-		if(tweenFrame->easeType->type == ofxTween::easeIn){
+ 
+        if(tweenFrame->easeType->type == ofxeasing::Type::In){
 			easingFunctions[i]->easeInPreview.draw();
 		}
-		else if(tweenFrame->easeType->type == ofxTween::easeOut){
+		else if(tweenFrame->easeType->type == ofxeasing::Type::Out){
 			easingFunctions[i]->easeOutPreview.draw();
 		}
 		else {
 			easingFunctions[i]->easeInOutPreview.draw();
 		}
-
+        ofPopStyle();
 		ofPopMatrix();
         ofNoFill();
         ofSetColor(40, 40, 40);
@@ -256,74 +257,74 @@ void ofxTLCurves::initializeEasings(){
 	//FUNCTIONS ----
 	EasingFunction* ef;
 	ef = new EasingFunction();
-	ef->easing = new ofxEasingLinear();
+    ef->easing = ofxeasing::Function::Linear;
 	ef->name = "linear";
 	easingFunctions.push_back(ef);
 
 	ef = new EasingFunction();
-	ef->easing = new ofxEasingSine();
+    ef->easing = ofxeasing::Function::Sine;
 	ef->name = "sine";
 	easingFunctions.push_back(ef);
 
 	ef = new EasingFunction();
-	ef->easing = new ofxEasingCirc();
+    ef->easing = ofxeasing::Function::Circular;
 	ef->name = "circular";
 	easingFunctions.push_back(ef);
 
 	ef = new EasingFunction();
-	ef->easing = new ofxEasingQuad();
+	ef->easing = ofxeasing::Function::Quadratic;
 	ef->name = "quadratic";
 	easingFunctions.push_back(ef);
 
 	ef = new EasingFunction();
-	ef->easing = new ofxEasingCubic();
+    ef->easing = ofxeasing::Function::Cubic;
 	ef->name = "cubic";
 	easingFunctions.push_back(ef);
 
 	ef = new EasingFunction();
-	ef->easing = new ofxEasingQuart();
+    ef->easing = ofxeasing::Function::Quartic;
 	ef->name = "quartic";
 	easingFunctions.push_back(ef);
 
 	ef = new EasingFunction();
-	ef->easing = new ofxEasingQuint();
+    ef->easing = ofxeasing::Function::Quintic;
 	ef->name = "quintic";
 	easingFunctions.push_back(ef);
 
 	ef = new EasingFunction();
-	ef->easing = new ofxEasingExpo();
+    ef->easing = ofxeasing::Function::Exponential;
 	ef->name = "exponential";
 	easingFunctions.push_back(ef);
 
 	ef = new EasingFunction();
-	ef->easing = new ofxEasingBack();
+    ef->easing = ofxeasing::Function::Back;
 	ef->name = "back";
 	easingFunctions.push_back(ef);
 
 	ef = new EasingFunction();
-	ef->easing = new ofxEasingBounce();
+    ef->easing = ofxeasing::Function::Bounce;
 	ef->name = "bounce";
 	easingFunctions.push_back(ef);
 
 	ef = new EasingFunction();
-	ef->easing = new ofxEasingElastic();
+    ef->easing = ofxeasing::Function::Elastic;
 	ef->name = "elastic";
 	easingFunctions.push_back(ef);
 
 	///TYPES -------
 	EasingType* et;
 	et = new EasingType();
-	et->type = ofxTween::easeIn;
+	et->type = ofxeasing::Type::In;
 	et->name = "ease in";
 	easingTypes.push_back(et);
 
 	et = new EasingType();
-	et->type = ofxTween::easeOut;
+	et->type = ofxeasing::Type::In;
 	et->name = "ease out";
 	easingTypes.push_back(et);
 
 	et = new EasingType();
-	et->type = ofxTween::easeInOut;
+	et->type = ofxeasing::Type::InOut;
 	et->name = "ease in-out";
 	easingTypes.push_back(et);
 
@@ -346,17 +347,17 @@ void ofxTLCurves::initializeEasings(){
 		//build preview
 		for(int p = 1; p < tweenBoxWidth-1; p++){
 			float percent;
-			percent = ofxTween::map(1.0*p/tweenBoxWidth, 0, 1.0, tweenBoxHeight-5, 5, false, *easingFunctions[i]->easing, ofxTween::easeIn);
+            percent = ofxeasing::map(1.0*p/tweenBoxWidth, 0, 1.0, tweenBoxHeight-5, 5, ofxeasing::easing(easingFunctions[i]->easing, ofxeasing::Type::In));
 			easingFunctions[i]->easeInPreview.addVertex(ofPoint(p, percent));
-			percent = ofxTween::map(1.0*p/tweenBoxWidth, 0, 1.0, tweenBoxHeight-5, 5, false, *easingFunctions[i]->easing, ofxTween::easeOut);
+			percent = ofxeasing::map(1.0*p/tweenBoxWidth, 0, 1.0, tweenBoxHeight-5, 5, ofxeasing::easing(easingFunctions[i]->easing, ofxeasing::Type::Out));
 			easingFunctions[i]->easeOutPreview.addVertex(ofPoint(p, percent));
-			percent = ofxTween::map(1.0*p/tweenBoxWidth, 0, 1.0, tweenBoxHeight-5, 5, false, *easingFunctions[i]->easing, ofxTween::easeInOut);
+			percent = ofxeasing::map(1.0*p/tweenBoxWidth, 0, 1.0, tweenBoxHeight-5, 5, ofxeasing::easing(easingFunctions[i]->easing, ofxeasing::Type::InOut));
 			easingFunctions[i]->easeInOutPreview.addVertex(ofPoint(p, percent));
 		}
 
-		easingFunctions[i]->easeInPreview.simplify();
-		easingFunctions[i]->easeOutPreview.simplify();
-		easingFunctions[i]->easeInOutPreview.simplify();
+//        easingFunctions[i]->easeInPreview.simplify();
+//        easingFunctions[i]->easeOutPreview.simplify();
+//        easingFunctions[i]->easeInOutPreview.simplify();
 
 	}
 

@@ -477,18 +477,15 @@ void ofxTLCameraTrack::interpolateBetween(ofxTLCameraFrame* target,
     }
     //EASE IN
     else if(sample1->easeOut == OFXTL_CAMERA_EASE_SMOOTH && sample2->easeIn == OFXTL_CAMERA_EASE_LINEAR){
-        ofxEasingQuad ease;
-        alpha = ofxTween::map(millis, sample1->time, sample2->time, 0, 1.0, false, ease, ofxTween::easeIn);
+        alpha = ofxeasing::map(millis, sample1->time, sample2->time, 0, 1.0, &ofxeasing::linear::easeIn);
     }
     //EASE OUT
     else if(sample1->easeOut == OFXTL_CAMERA_EASE_LINEAR && sample2->easeIn == OFXTL_CAMERA_EASE_SMOOTH){
-        ofxEasingQuad ease;
-        alpha = ofxTween::map(millis, sample1->time, sample2->time, 0, 1.0, false, ease, ofxTween::easeOut);
+        alpha = ofxeasing::map(millis, sample1->time, sample2->time, 0, 1.0, &ofxeasing::linear::easeOut);
     }
     //EASE IN OUT
     else if(sample1->easeOut == OFXTL_CAMERA_EASE_SMOOTH && sample2->easeIn == OFXTL_CAMERA_EASE_SMOOTH){
-        ofxEasingQuad ease;
-        alpha = ofxTween::map(millis, sample1->time, sample2->time, 0, 1.0, false, ease, ofxTween::easeInOut);
+        alpha = ofxeasing::map(millis, sample1->time, sample2->time, 0, 1.0, &ofxeasing::quad::easeInOut);
     }
     
 	//float alpha = ofMap(millis, sample1->time, sample2->time, 0, 1.0, false);

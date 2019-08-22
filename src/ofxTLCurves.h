@@ -35,7 +35,7 @@
 
 #include "ofMain.h"
 #include "ofxTLKeyframes.h"
-#include "ofxTween.h"
+#include "ofxEasing.h"
 
 typedef struct {
 	int id;
@@ -44,15 +44,14 @@ typedef struct {
 	ofPolyline easeInPreview;
 	ofPolyline easeOutPreview;
 	ofPolyline easeInOutPreview;
-
-	ofxEasing* easing;
+    ofxeasing::Function easing;
 } EasingFunction;
 
 typedef struct {
 	int id;
 	ofRectangle bounds;
 	string name;
-	ofxTween::ofxEasingType type;
+    ofxeasing::Type type;
 } EasingType;
 
 class ofxTLTweenKeyframe : public ofxTLKeyframe{
