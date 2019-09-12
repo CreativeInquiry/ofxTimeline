@@ -34,7 +34,7 @@
 
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
-#include "ofxTween.h"
+#include "ofxEasing.h"
 #include "ofRange.h"
 #include "ofxTLEvents.h"
 #include <set>

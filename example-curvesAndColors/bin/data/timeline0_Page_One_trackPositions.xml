@@ -1,20 +1,56 @@
 <positions>
     <element name="Colors">
         <x>0.000000000</x>
-        <y>267.000000000</y>
-        <width>1024.000000000</width>
-        <height>20.000000000</height>
+        <y>436.000000000</y>
+        <width>1280.000000000</width>
+        <height>41.652343750</height>
+    </element>
+    <element name="Joint 0">
+        <x>0.000000000</x>
+        <y>52.000000000</y>
+        <width>840.000000000</width>
+        <height>0.000000000</height>
+    </element>
+    <element name="Joint 1">
+        <x>0.000000000</x>
+        <y>76.000000000</y>
+        <width>840.000000000</width>
+        <height>0.000000000</height>
+    </element>
+    <element name="Joint 2">
+        <x>0.000000000</x>
+        <y>100.000000000</y>
+        <width>840.000000000</width>
+        <height>0.000000000</height>
+    </element>
+    <element name="Joint 3">
+        <x>0.000000000</x>
+        <y>124.000000000</y>
+        <width>840.000000000</width>
+        <height>0.000000000</height>
+    </element>
+    <element name="Joint 4">
+        <x>0.000000000</x>
+        <y>148.000000000</y>
+        <width>840.000000000</width>
+        <height>0.000000000</height>
+    </element>
+    <element name="Joint 5">
+        <x>0.000000000</x>
+        <y>172.000000000</y>
+        <width>840.000000000</width>
+        <height>0.000000000</height>
     </element>
     <element name="Rotate X">
         <x>0.000000000</x>
         <y>52.000000000</y>
-        <width>1024.000000000</width>
-        <height>86.000000000</height>
+        <width>1680.000000000</width>
+        <height>59.730468750</height>
     </element>
     <element name="Rotate Y">
         <x>0.000000000</x>
-        <y>162.000000000</y>
-        <width>1024.000000000</width>
-        <height>81.000000000</height>
+        <y>135.730468750</y>
+        <width>1680.000000000</width>
+        <height>23.929687500</height>
     </element>
 </positions>

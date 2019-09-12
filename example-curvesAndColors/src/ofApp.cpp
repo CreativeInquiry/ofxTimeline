@@ -29,37 +29,34 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "testApp.h"
+#include "ofApp.h"
 
 //--------------------------------------------------------------
-void testApp::setup(){
+void ofApp::setup(){
 	
 	ofSetFrameRate(60);
 	ofSetVerticalSync(true);
-    ofEnableSmoothing();
-	
-	glEnable(GL_DEPTH_TEST);
-	ofEnableLighting();
-	
-	light.setPosition(ofGetWidth()*.5, ofGetHeight()*.25, 0);
-	light.enable();
+
 		
     //Timeline setup and playback details
-    ofxTimeline::removeCocoaMenusFromGlut("CurvesColorsDemo");
+    ofxTimeline::removeCocoaMenusFromGlut("Joint Positions");
     
 	timeline.setup();
-    timeline.setFrameRate(30);
-	timeline.setDurationInFrames(90);
+    timeline.setFrameRate(60);
+    timeline.setDurationInSeconds(5*60);
 	timeline.setLoopType(OF_LOOP_NORMAL);
+    timeline.setWidth(ofGetWidth()/2.0);
+    timeline.setHeight(ofGetHeight());
     
 	//each call to "add keyframes" add's another track to the timeline
-	timeline.addCurves("Rotate X", ofRange(0, 360));
-	timeline.addCurves("Rotate Y", ofRange(0, 360));
-    
-	//Flags are little markers that you can attach text to
-    //They are only useful when listening to bangFired() events
-    //so that you know when one has passed
-	timeline.addColors("Colors");
+	timeline.addCurves("Joint 0", ofRange(-360, 360));
+    timeline.addCurves("Joint 1", ofRange(-360, 360));
+    timeline.addCurves("Joint 2", ofRange(-360, 360));
+    timeline.addCurves("Joint 3", ofRange(-360, 360));
+    timeline.addCurves("Joint 4", ofRange(-360, 360));
+    timeline.addCurves("Joint 5", ofRange(-360, 360));
+
+
 
     //setting framebased to true results in the timeline never skipping frames
     //and also speeding up with the 
@@ -69,14 +66,14 @@ void testApp::setup(){
 }
 
 //--------------------------------------------------------------
-void testApp::update(){
-
+void ofApp::update(){
+    
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){
+void ofApp::draw(){
 	
-	ofBackground(.15*255);
+	ofBackground(0, 0, 0);
 	ofPushMatrix();
 	
 	ofPushStyle();
@@ -87,60 +84,63 @@ void testApp::draw(){
 	ofTranslate(ofGetWidth()*.5, ofGetHeight()*.66, 40);
     
     //Read the values out of the timeline and use them to change the viewport rotation
-	ofRotate(timeline.getValue("Rotate X"), 1, 0, 0);
-	ofRotate(timeline.getValue("Rotate Y"), 0, 1, 0);
+	ofRotateDeg(timeline.getValue("Joint 0"), 1, 0, 0);
+	ofRotateDeg(timeline.getValue("Joint 1"), 0, 1, 0);
+    ofRotateDeg(timeline.getValue("Joint 2"), 0, 0, 1);
 	
-	ofBox(0,0,0, 200);
+	ofDrawBox(0,0,0, 200);
 	
 	ofPopMatrix();
 
 	ofPopStyle();
 	
+    ofSetColor(4, 5, 6);
+    ofDrawRectangle(timeline.getDrawRect());
 	timeline.draw();
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed(int key){
+void ofApp::keyPressed(int key){
 
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased(int key){
+void ofApp::keyReleased(int key){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){
+void ofApp::mouseMoved(int x, int y ){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
+void ofApp::mouseDragged(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
+void ofApp::mousePressed(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
+void ofApp::mouseReleased(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
+void ofApp::windowResized(int w, int h){
 
 }
 
 //--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){
+void ofApp::gotMessage(ofMessage msg){
 
 }
 
 //--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){ 
+void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
 }
 	

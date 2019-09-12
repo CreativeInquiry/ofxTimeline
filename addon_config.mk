@@ -53,18 +53,27 @@ linux64:
 	# when parsing the file system looking for libraries exclude this for all or 
 	# a specific platform
 	ADDON_LIBS_EXCLUDE = libs/kiss
+	ADDON_LIBS_EXCLUDE = libs/ofOpenALSoundPlayer_TimelineAdditions
+	ADDON_SOURCES_EXCLUDE = libs/ofOpenALSoundPlayer_TimelineAdditions/%
+	ADDON_INCLUDES_EXCLUDE = libs/ofOpenALSoundPlayer_TimelineAdditions/%
 	
 linux:
 	ADDON_LIBS_EXCLUDE = libs/kiss
+	ADDON_LIBS_EXCLUDE = libs/ofOpenALSoundPlayer_TimelineAdditions
+	ADDON_SOURCES_EXCLUDE = libs/ofOpenALSoundPlayer_TimelineAdditions/%
+	ADDON_INCLUDES_EXCLUDE = libs/ofOpenALSoundPlayer_TimelineAdditions/%
 	
 linuxarmv6l:
 	ADDON_LIBS_EXCLUDE = libs/kiss
+	ADDON_LIBS_EXCLUDE = libs/ofOpenALSoundPlayer_TimelineAdditions
+	ADDON_SOURCES_EXCLUDE = libs/ofOpenALSoundPlayer_TimelineAdditions/%
+	ADDON_INCLUDES_EXCLUDE = libs/ofOpenALSoundPlayer_TimelineAdditions/%
 	
 linuxarmv7l:
 	ADDON_LIBS_EXCLUDE = libs/kiss
+	ADDON_LIBS_EXCLUDE = libs/ofOpenALSoundPlayer_TimelineAdditions
+	ADDON_SOURCES_EXCLUDE = libs/ofOpenALSoundPlayer_TimelineAdditions/%
+	ADDON_INCLUDES_EXCLUDE = libs/ofOpenALSoundPlayer_TimelineAdditions/%
 	
 osx:
-win_cb:
-vs2010:
-iphone:
-android:
+vs:

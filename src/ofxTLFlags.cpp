@@ -61,7 +61,7 @@ void ofxTLFlags::draw(){
 			int textHeight = bounds.y + 10 + ( (20*i) % int(MAX(bounds.height-15, 15)));
 			key->display = ofRectangle(MIN(screenX+3, bounds.getMaxX() - key->textField.bounds.width),
 									   textHeight-10, 100, 15);
-			ofRect(key->display);
+			ofDrawRectangle(key->display);
 			
 			ofSetColor(timeline->getColors().textColor);
 			
@@ -167,19 +167,25 @@ void ofxTLFlags::mouseReleased(ofMouseEventArgs& args, long millis){
 
 void ofxTLFlags::keyPressed(ofKeyEventArgs& args){
 	
-	if(enteringText){
-        //enter key submits the values
-        //This could be done be responding to the event from the text field itself...
-        if(args.key == OF_KEY_RETURN){
-            enteringText = false;
-            timeline->dismissedModalContent();
-            timeline->flagTrackModified(this);
-        }
-    }
-    //normal behavior for nudging and deleting and stuff
-	else{
-        ofxTLBangs::keyPressed(args);
-    }    
+	if (enteringText) {
+		//enter key submits the values
+		//This could be done be responding to the event from the text field itself...
+		if (args.key == OF_KEY_RETURN) {
+			enteringText = false;
+			for (int i = 0; i < selectedKeyframes.size(); i++) {
+				((ofxTLFlag*)selectedKeyframes[i])->textField.endEditing();
+			}
+			timeline->dismissedModalContent();
+			timeline->flagTrackModified(this);
+		}
+		else {
+			clickedTextField->textField.keyPressed(args);
+		}
+	}
+	//normal behavior for nudging and deleting and stuff
+	else {
+		ofxTLBangs::keyPressed(args);
+	}
 }
 
 ofxTLKeyframe* ofxTLFlags::newKeyframe(){

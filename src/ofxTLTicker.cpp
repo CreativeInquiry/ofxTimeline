@@ -65,7 +65,7 @@ void ofxTLTicker::draw(){
 		refreshTickMarks();
 	}
 	
-	tickerMarks.setStrokeColor( ofColor(200, 180, 40) );
+	tickerMarks.setStrokeColor(timeline->getColors().outlineColor);
 	tickerMarks.setStrokeWidth(1);
 	tickerMarks.draw(0, bounds.y);
 		
@@ -74,10 +74,10 @@ void ofxTLTicker::draw(){
 	        updateBPMPoints();
 		}
         ofPushStyle();
-        ofSetColor(255, 255, 255, 50);
+        ofSetColor(255, 255, 255, 150);
         for(int i = 0; i < bpmScreenPoints.size(); i++){
             ofSetLineWidth(bpmScreenPoints[i].weight);
-            ofLine(bpmScreenPoints[i].screenX, getBottomEdge(), bpmScreenPoints[i].screenX, totalDrawRect.y+totalDrawRect.height);
+			ofDrawLine(bpmScreenPoints[i].screenX, getBottomEdge(), bpmScreenPoints[i].screenX, totalDrawRect.y+totalDrawRect.height);
         }
         ofPopStyle();
     }
@@ -103,16 +103,16 @@ void ofxTLTicker::draw(){
 			}
 			previewTimecodeX = ofClamp(screenX+5, bounds.getMinX(), bounds.getMaxX()-textW-5);
             ofFill();
-            ofRect(previewTimecodeX-5, bounds.y+textH, textW, textH);		
+			ofDrawRectangle(previewTimecodeX-5, bounds.y+textH, textW, textH);
             //draw playhead line
             ofSetColor(timeline->getColors().textColor);
             timeline->getFont().drawString(text, previewTimecodeX, bounds.y+textH*2);
         }
 		
 		ofSetColor(timeline->getColors().highlightColor);
-		ofSetLineWidth(1);
+		ofSetLineWidth(2);
 
-        ofLine(screenX, totalDrawRect.y, screenX, totalDrawRect.y+totalDrawRect.height);
+		ofDrawLine(screenX, totalDrawRect.y, screenX, totalDrawRect.y+totalDrawRect.height);
 	}
 	
 	//draw current frame
@@ -131,7 +131,7 @@ void ofxTLTicker::draw(){
         int timeCodeX = ofClamp(currentFrameX+5, bounds.getMinX(), bounds.getMaxX()-textW-5);
         ofSetColor(timeline->getColors().backgroundColor);
         ofFill();
-        ofRect(timeCodeX-5, bounds.y, textW, textH);
+		ofDrawRectangle(timeCodeX-5, bounds.y, textW, textH);
         ofSetColor(timeline->getColors().textColor);
         timeline->getFont().drawString(text, timeCodeX, bounds.y+textH);
     }
@@ -144,12 +144,12 @@ void ofxTLTicker::draw(){
     }
 	
 	//draw playhead line
-	ofSetLineWidth(1);
-	ofLine(currentFrameX, totalDrawRect.y, currentFrameX, totalDrawRect.y+totalDrawRect.height);
+	ofSetLineWidth(2);
+	ofDrawLine(currentFrameX, totalDrawRect.y, currentFrameX, totalDrawRect.y+totalDrawRect.height);
 	//draw bounds 
 	ofNoFill();
-	ofSetColor(200, 180, 40);
-	ofRect(bounds);
+	ofSetColor(timeline->getColors().outlineColor);
+	ofDrawRectangle(bounds);
 		
 	ofPopStyle();
 }

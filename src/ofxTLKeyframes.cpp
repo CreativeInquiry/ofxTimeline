@@ -62,17 +62,17 @@ void ofxTLKeyframes::recomputePreviews(){
 
 //	cout << "ofxTLKeyframes::recomputePreviews " << endl;
 
-//	if(keyframes.size() == 0 || keyframes.size() == 1){
-//		preview.addVertex(ofPoint(bounds.x, bounds.y + bounds.height - sampleAtPercent(.5f)*bounds.height));
-//		preview.addVertex(ofPoint(bounds.x+bounds.width, bounds.y + bounds.height - sampleAtPercent(.5f)*bounds.height));
-//	}
-//	else{
+//    if(keyframes.size() == 0 || keyframes.size() == 1){
+//        preview.addVertex(ofPoint(bounds.x, bounds.y + bounds.height - sampleAtPercent(.5f)*bounds.height));
+//        preview.addVertex(ofPoint(bounds.x+bounds.width, bounds.y + bounds.height - sampleAtPercent(.5f)*bounds.height));
+//    }
+//    else{
 		for(int p = bounds.getMinX(); p <= bounds.getMaxX(); p+=2){
 			preview.addVertex(p,  bounds.y + bounds.height - sampleAtPercent(screenXtoNormalizedX(p)) * bounds.height);
 		}
-//	}
+//    }
 //	int size = preview.getVertices().size();
-	preview.simplify();
+    preview.simplify();
 	//cout << "simplify pre " << size << " post: " << preview.getVertices().size() << " dif: " << (size - preview.getVertices().size()) << endl;
 
 	ofVec2f lastPoint;
@@ -111,7 +111,7 @@ void ofxTLKeyframes::draw(){
 	//float currentPercent = sampleAtTime(timeline->getCurrentTimeMillis());
 	float currentPercent = sampleAtTime(currentTrackTime());
 	ofFill();
-	ofRect(bounds.x, bounds.getMaxY(), bounds.width, -bounds.height*currentPercent);
+	ofDrawRectangle(bounds.x, bounds.getMaxY(), bounds.width, -bounds.height*currentPercent);
 
 	//***** DRAW KEYFRAME LINES
 	ofSetColor(timeline->getColors().keyColor);
@@ -127,7 +127,7 @@ void ofxTLKeyframes::draw(){
 		ofFill();
 		ofSetColor(timeline->getColors().highlightColor);
 		ofVec2f hoverKeyPoint = screenPositionForKeyframe( hoverKeyframe );
-		ofCircle(hoverKeyPoint.x, hoverKeyPoint.y, 6);
+		ofDrawCircle(hoverKeyPoint, 6);
 		ofPopStyle();
 	}
 
@@ -135,7 +135,7 @@ void ofxTLKeyframes::draw(){
 	ofSetColor(timeline->getColors().textColor);
 	ofNoFill();
 	for(int i = 0; i < keyPoints.size(); i++){
-		ofRect(keyPoints[i].x-1, keyPoints[i].y-1, 3, 3);
+		ofDrawRectangle(keyPoints[i].x-1, keyPoints[i].y-1, 3, 3);
 	}
 
 	//**** SELECTED KEYS
@@ -149,7 +149,7 @@ void ofxTLKeyframes::draw(){
 				string frameString = timeline->formatTime(selectedKeyframes[i]->time);
 				timeline->getFont().drawString(ofToString(keysValue, 4), screenpoint.x+5, screenpoint.y-5);
 			}
-			ofCircle(screenpoint.x, screenpoint.y, 4);
+			ofDrawCircle(screenpoint, 4);
 		}
 	}
 
@@ -356,7 +356,7 @@ bool ofxTLKeyframes::mousePressed(ofMouseEventArgs& args, long millis){
 	ofVec2f screenpoint = ofVec2f(args.x, args.y);
 	keysAreStretchable = ofGetModifierShiftPressed() && ofGetModifierControlPressed();
 
-	constrainVerticalDrag = ofGetModifierAltPressed() ? args.y : NULL;
+	constrainVerticalDrag = ofGetModifierAltPressed() ? args.y : 0.f;
 
 
     keysDidDrag = false;
@@ -462,7 +462,7 @@ void ofxTLKeyframes::mouseMoved(ofMouseEventArgs& args, long millis){
 void ofxTLKeyframes::mouseDragged(ofMouseEventArgs& args, long millis){
 
 
-    if ( ofGetModifierAltPressed() && constrainVerticalDrag != NULL ) args.y = constrainVerticalDrag;
+	if ( ofGetModifierAltPressed() && constrainVerticalDrag != 0.f ) args.y = constrainVerticalDrag;
 
 	if(keysAreStretchable){
 		//cast the stretch anchor to long so that it can be signed
@@ -913,7 +913,7 @@ void ofxTLKeyframes::simplifySelectedKeyframes( float tolerance ){
 
     if ( selectedKeyframes.size() > 2 )
     {
-         vector<ofPoint> pts;
+		vector<ofDefaultVec3> pts;
         float startTime = (float)selectedKeyframes[0]->time;
         float timeNormalizationFactor = 1.0 / (float)selectedKeyframes.size();
         for(int k = 0; k < selectedKeyframes.size(); k++){

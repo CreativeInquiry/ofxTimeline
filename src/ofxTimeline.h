@@ -93,8 +93,8 @@ class ofxTimeline : ofThread {
 	
 	ofxTimeline();
 	virtual ~ofxTimeline();
-
-	virtual void setup();
+	
+	virtual void setup(const string& dataPathRoot = ofToDataPath("GUI/"));
 	
 	//Optionally run ofxTimeline on the background thread
 	//this isn't necessary most of the time but
@@ -169,7 +169,8 @@ class ofxTimeline : ofThread {
     void setDefaultFontPath(string fontPath);
     
     //timing setup functions
-    void setFrameRate(float fps);    
+    void setFrameRate(float fps);
+    float getFrameRate();
     void setDurationInFrames(int frames);
 	void setDurationInSeconds(float seconds);
 	void setDurationInMillis(unsigned long long millis);

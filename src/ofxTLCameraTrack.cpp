@@ -58,7 +58,7 @@ ofxTLCameraTrack::ofxTLCameraTrack(){
 }
 
 ofxTLCameraTrack::~ofxTLCameraTrack(){
-	
+	disable();
 }
 
 void ofxTLCameraTrack::enable(){
@@ -69,10 +69,10 @@ void ofxTLCameraTrack::enable(){
 }
 
 void ofxTLCameraTrack::disable(){
-	ofxTLKeyframes::disable();
-	if(!enabled){
+	if (enabled) {
 		ofRemoveListener(ofEvents().update, this, &ofxTLCameraTrack::update);
 	}
+	ofxTLKeyframes::disable();
 }
 
 void ofxTLCameraTrack::setCamera(ofCamera& cam){
@@ -87,7 +87,7 @@ void ofxTLCameraTrack::draw(){
 	if(lockCameraToTrack){
 		ofSetColor(timeline->getColors().keyColor, 40*(sin(ofGetElapsedTimef()*5)*.5+.5)+25);
 		ofFill();
-		ofRect(bounds);
+		ofDrawRectangle(bounds);
 	}
 	ofSetColor(timeline->getColors().keyColor);
 	ofNoFill();
@@ -131,7 +131,7 @@ void ofxTLCameraTrack::draw(){
 	for(int i = 0; i < selectedKeyframes.size(); i++){
 		float screenX = millisToScreenX( selectedKeyframes[i]->time );
 		float screenY = bounds.y+bounds.height/2;
-		ofCircle(screenX, screenY, 4);
+		ofDrawCircle(screenX, screenY, 4);
 	}
 
 	ofPopStyle();
@@ -164,11 +164,11 @@ void ofxTLCameraTrack::draw3d(){
 		n.setPosition(interFrame.position);
 		n.setOrientation(interFrame.orientation);
 		ofSetColor(0,0,255);
-		ofLine(n.getPosition(), n.getPosition() + n.getLookAtDir()*10);
+		ofDrawLine(n.getPosition(), n.getPosition() + n.getLookAtDir()*10);
 		ofSetColor(0,255,0);
-		ofLine(n.getPosition(), n.getPosition() + n.getUpDir()*10);
+		ofDrawLine(n.getPosition(), n.getPosition() + n.getUpDir()*10);
 		ofSetColor(255,0,0);
-		ofLine(n.getPosition(), n.getPosition() + n.getSideDir()*10);
+		ofDrawLine(n.getPosition(), n.getPosition() + n.getSideDir()*10);
 	}
 
 	setCameraFrameToTime(&interFrame, currentTrackTime());
@@ -177,11 +177,11 @@ void ofxTLCameraTrack::draw3d(){
 	
 	ofSetLineWidth(3);
 	ofSetColor(0,0,255);
-	ofLine(n.getPosition(), n.getPosition() + n.getLookAtDir()*25);
+	ofDrawLine(n.getPosition(), n.getPosition() + n.getLookAtDir()*25);
 	ofSetColor(0,255,0);
-	ofLine(n.getPosition(), n.getPosition() + n.getUpDir()*25);
+	ofDrawLine(n.getPosition(), n.getPosition() + n.getUpDir()*25);
 	ofSetColor(255,0,0);
-	ofLine(n.getPosition(), n.getPosition() + n.getSideDir()*25);
+	ofDrawLine(n.getPosition(), n.getPosition() + n.getSideDir()*25);
 	
 	ofNoFill();
 	ofSetColor(255);
@@ -194,50 +194,50 @@ void ofxTLCameraTrack::draweEase(CameraTrackEase ease, ofPoint screenPoint, bool
     switch (ease) {
         case OFXTL_CAMERA_EASE_LINEAR:
             if(easeIn){
-                ofTriangle(screenPoint.x-bounds.height, screenPoint.y,
-                           screenPoint.x, screenPoint.y,
-                           screenPoint.x, screenPoint.y+bounds.height);
+				ofDrawTriangle(screenPoint.x-bounds.height, screenPoint.y,
+							   screenPoint.x, screenPoint.y,
+							   screenPoint.x, screenPoint.y+bounds.height);
             }
             else{
-                ofTriangle(screenPoint.x, screenPoint.y,
-                           screenPoint.x, screenPoint.y+bounds.height,
-                           screenPoint.x+bounds.height, screenPoint.y+bounds.height);
+				ofDrawTriangle(screenPoint.x, screenPoint.y,
+                               screenPoint.x, screenPoint.y+bounds.height,
+                               screenPoint.x+bounds.height, screenPoint.y+bounds.height);
             }
             break;
         case OFXTL_CAMERA_EASE_SMOOTH:
             if(easeIn){
-                ofBezier(screenPoint.x-bounds.height, screenPoint.y,
+				ofDrawBezier(screenPoint.x-bounds.height, screenPoint.y,
                          screenPoint.x-bounds.height/2, screenPoint.y,
                          screenPoint.x, screenPoint.y+bounds.height/2,
                          screenPoint.x, screenPoint.y+bounds.height);
-                ofLine(screenPoint.x-bounds.height, screenPoint.y,
-                       screenPoint.x, screenPoint.y);
-                ofLine(screenPoint.x, screenPoint.y,
-                       screenPoint.x, screenPoint.y+bounds.height);
+				ofDrawLine(screenPoint.x-bounds.height, screenPoint.y,
+						   screenPoint.x, screenPoint.y);
+				ofDrawLine(screenPoint.x, screenPoint.y,
+                           screenPoint.x, screenPoint.y+bounds.height);
             }
             else {
-                ofBezier(screenPoint.x, screenPoint.y,
+				ofDrawBezier(screenPoint.x, screenPoint.y,
                          screenPoint.x, screenPoint.y+bounds.height/2,
                          screenPoint.x+bounds.height/2, screenPoint.y+bounds.height,
                          screenPoint.x+bounds.height, screenPoint.y+bounds.height);
-                ofLine(screenPoint.x, screenPoint.y,
-                       screenPoint.x, screenPoint.y+bounds.height);
-                ofLine(screenPoint.x, screenPoint.y+bounds.height,
-                       screenPoint.x+bounds.height, screenPoint.y+bounds.height);
+				ofDrawLine(screenPoint.x, screenPoint.y,
+                           screenPoint.x, screenPoint.y+bounds.height);
+				ofDrawLine(screenPoint.x, screenPoint.y+bounds.height,
+                           screenPoint.x+bounds.height, screenPoint.y+bounds.height);
             }
             break;
         case OFXTL_CAMERA_EASE_CUT:
             if(easeIn){
-	            ofRect(screenPoint.x-bounds.height/2, screenPoint.y,
-                       bounds.height/2, bounds.height/2);
+				ofDrawRectangle(screenPoint.x-bounds.height/2, screenPoint.y,
+								bounds.height/2, bounds.height/2);
             }
             else{
-                ofRect(screenPoint.x, screenPoint.y+bounds.height/2,
-                       bounds.height/2, bounds.height/2);
+				ofDrawRectangle(screenPoint.x, screenPoint.y+bounds.height/2,
+								bounds.height/2, bounds.height/2);
             }
             break;
         default:
-            ofLogError("ofxTLCameraTrack::draweEase -- invalid ease");
+            ofLogError(__FUNCTION__) << "Invalid ease value " << ease;
             break;
     }
 }
@@ -349,13 +349,13 @@ ofxTLKeyframe* ofxTLCameraTrack::newKeyframe(){
 
 void ofxTLCameraTrack::restoreKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore){
 	ofxTLCameraFrame* cameraFrame = (ofxTLCameraFrame*)key;
-	cameraFrame->position = ofVec3f(xmlStore.getValue("px", 0.),
-						 			xmlStore.getValue("py", 0.),
-									xmlStore.getValue("pz", 0.));
-	cameraFrame->orientation.set(xmlStore.getValue("ox", 0.),
-								  xmlStore.getValue("oy", 0.),
-								  xmlStore.getValue("oz", 0.),
-								  xmlStore.getValue("ow", 1.));
+	cameraFrame->position = glm::vec3(xmlStore.getValue("px", 0.f),
+						 			  xmlStore.getValue("py", 0.f),
+									  xmlStore.getValue("pz", 0.f));
+	cameraFrame->orientation = glm::quat(xmlStore.getValue("ow", 1.),
+										 xmlStore.getValue("ox", 0.),
+										 xmlStore.getValue("oy", 0.),
+										 xmlStore.getValue("oz", 0.));
 	cameraFrame->easeIn  = (CameraTrackEase)xmlStore.getValue("easein", (int)OFXTL_CAMERA_EASE_LINEAR);
 	cameraFrame->easeOut = (CameraTrackEase)xmlStore.getValue("easeout", (int)OFXTL_CAMERA_EASE_LINEAR);
 }
@@ -366,10 +366,10 @@ void ofxTLCameraTrack::storeKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStor
 	xmlStore.addValue("py", cameraFrame->position.y);
 	xmlStore.addValue("pz", cameraFrame->position.z);
 	
-	xmlStore.addValue("ox", cameraFrame->orientation._v.x);
-	xmlStore.addValue("oy", cameraFrame->orientation._v.y);
-	xmlStore.addValue("oz", cameraFrame->orientation._v.z);
-	xmlStore.addValue("ow", cameraFrame->orientation._v.w);
+	xmlStore.addValue("ow", cameraFrame->orientation.w);
+	xmlStore.addValue("ox", cameraFrame->orientation.x);
+	xmlStore.addValue("oy", cameraFrame->orientation.y);
+	xmlStore.addValue("oz", cameraFrame->orientation.z);
 	
 	xmlStore.addValue("easein",  (int)cameraFrame->easeIn);
 	xmlStore.addValue("easeout", (int)cameraFrame->easeOut);
@@ -389,7 +389,7 @@ ofxTLKeyframe* ofxTLCameraTrack::keyframeAtScreenpoint(ofVec2f p){
 
 void ofxTLCameraTrack::moveCameraToTime(unsigned long long millis){
 	if(camera == NULL){
-		ofLogError("ofxCameraTrack -- can't modify a null camera!");
+		ofLogError(__FUNCTION__) << "Can't modify a null camera!";
 		return;
 	}
 	
@@ -436,9 +436,10 @@ void ofxTLCameraTrack::setCameraFrameToTime(ofxTLCameraFrame* target, unsigned l
 }
 
 void ofxTLCameraTrack::moveCameraToPosition(ofxTLCameraFrame* target){
-	camera->setPosition(camera->getPosition().getInterpolated(target->position, dampening) );
-	ofQuaternion q;
-	q.slerp(dampening, camera->getOrientationQuat(), target->orientation);
+	const glm::vec3 p = glm::lerp(camera->getPosition(), target->position, dampening);
+	camera->setPosition(p); 
+	
+	const glm::quat q = glm::slerp(camera->getOrientationQuat(), target->orientation, dampening);
 	camera->setOrientation(q);
 }
 
@@ -476,18 +477,15 @@ void ofxTLCameraTrack::interpolateBetween(ofxTLCameraFrame* target,
     }
     //EASE IN
     else if(sample1->easeOut == OFXTL_CAMERA_EASE_SMOOTH && sample2->easeIn == OFXTL_CAMERA_EASE_LINEAR){
-        ofxEasingQuad ease;
-        alpha = ofxTween::map(millis, sample1->time, sample2->time, 0, 1.0, false, ease, ofxTween::easeIn);
+        alpha = ofxeasing::map(millis, sample1->time, sample2->time, 0, 1.0, &ofxeasing::linear::easeIn);
     }
     //EASE OUT
     else if(sample1->easeOut == OFXTL_CAMERA_EASE_LINEAR && sample2->easeIn == OFXTL_CAMERA_EASE_SMOOTH){
-        ofxEasingQuad ease;
-        alpha = ofxTween::map(millis, sample1->time, sample2->time, 0, 1.0, false, ease, ofxTween::easeOut);
+        alpha = ofxeasing::map(millis, sample1->time, sample2->time, 0, 1.0, &ofxeasing::linear::easeOut);
     }
     //EASE IN OUT
     else if(sample1->easeOut == OFXTL_CAMERA_EASE_SMOOTH && sample2->easeIn == OFXTL_CAMERA_EASE_SMOOTH){
-        ofxEasingQuad ease;
-        alpha = ofxTween::map(millis, sample1->time, sample2->time, 0, 1.0, false, ease, ofxTween::easeInOut);
+        alpha = ofxeasing::map(millis, sample1->time, sample2->time, 0, 1.0, &ofxeasing::quad::easeInOut);
     }
     
 	//float alpha = ofMap(millis, sample1->time, sample2->time, 0, 1.0, false);
@@ -495,7 +493,7 @@ void ofxTLCameraTrack::interpolateBetween(ofxTLCameraFrame* target,
 	target->time = millis;
 	target->position = ofHermiteInterpolate(prev->position,sample1->position,sample2->position,next->position,alpha,0,0);
 	//	interp.position = sample1.position.getInterpolated(sample2.position, alpha);
-	target->orientation.slerp(alpha, sample1->orientation, sample2->orientation);
+	target->orientation = glm::slerp(sample1->orientation, sample2->orientation, alpha);
 	//cout << "interpolating between " << sample1.position << " and " << sample2.position << " with alpha " << alpha << endl;
 }
 

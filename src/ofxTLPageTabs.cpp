@@ -44,12 +44,12 @@ void ofxTLPageTabs::draw(){
 		if(i == selectedPageIndex){
 			ofFill();
 			ofSetColor(timeline->getColors().highlightColor, 120);
-			ofRect(pages[i].bounds);
+			ofDrawRectangle(pages[i].bounds);
 		}
 		ofNoFill();
 		//ofSetColor(255, 100, 0);
 		ofSetColor(timeline->getColors().outlineColor);
-		ofRect(pages[i].bounds);
+		ofDrawRectangle(pages[i].bounds);
 		ofSetColor(timeline->getColors().textColor);
 		timeline->getFont().drawString(pages[i].name, pages[i].bounds.x + 10, pages[i].bounds.y + timeline->getFont().getLineHeight());
 	}
@@ -86,8 +86,10 @@ void ofxTLPageTabs::addPage(string name){
 void ofxTLPageTabs::removePage(string name){
 	int found = -1;
 	for (int i = 0; i < pages.size(); i++) {
-		found = i;
-		break;
+		if (pages[i].name == name) {
+			found = i;
+			break;
+		}
 	}
 
 	if (found >= 0) {

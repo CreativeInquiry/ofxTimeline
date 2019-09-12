@@ -132,7 +132,7 @@ bool ofxTLImageSequenceFrame::loadFrame()
 		return false;
 	}
 	
-	if(!frame->loadImage(filename)){
+	if(!frame->load(filename)){
 		ofLog(OF_LOG_ERROR, "ofxTLImageSequenceFrame - ERROR - failed to load file " + filename);
 		return false;
 	}
@@ -141,19 +141,19 @@ bool ofxTLImageSequenceFrame::loadFrame()
     if(!thumbLoaded){
         thumbnail->clear();
         thumbnail->setUseTexture(false);
-        thumbnail->clone(*frame);
+        thumbnail->setFromPixels(frame->getPixels());
         thumbWidth = desiredThumbWidth;
         float scaleFactor = 1.0*frame->getWidth() / thumbWidth;
         thumbHeight = frame->getHeight() / scaleFactor;
         thumbnail->resize(thumbWidth, thumbHeight);
-        thumbnail->saveImage(thumbFilename);
-        if(type != OF_IMAGE_UNDEFINED && thumbnail->getPixelsRef().getImageType() != type){
+		thumbnail->save(thumbFilename);
+		if(type != OF_IMAGE_UNDEFINED && thumbnail->getPixels().getImageType() != type){
 //            thumbnail->setImageType(type);
         }
         thumbLoaded = true;
     }
 	
-	if(type != OF_IMAGE_UNDEFINED && frame->getPixelsRef().getImageType() != type){
+	if(type != OF_IMAGE_UNDEFINED && frame->getPixels().getImageType() != type){
 		frame->setImageType(type);
 	}
 	
@@ -186,7 +186,7 @@ bool ofxTLImageSequenceFrame::loadThumb()
     }
     thumbnail->clear();
     thumbnail->setUseTexture(false);
-    if(!thumbnail->loadImage(thumbFilename)){
+	if(!thumbnail->load(thumbFilename)){
 		ofLog(OF_LOG_ERROR, "ofxTLImageSequenceFrame - ERROR - thumbnail file exists " + thumbFilename + " but was corrputed. reloading." );
         return loadFrame();
     }
@@ -196,7 +196,7 @@ bool ofxTLImageSequenceFrame::loadThumb()
         return loadFrame();
     }
 	
-	if(type != OF_IMAGE_UNDEFINED && thumbnail->getPixelsRef().getImageType() != type){
+	if(type != OF_IMAGE_UNDEFINED && thumbnail->getPixels().getImageType() != type){
 		//thumbnail->setImageType( type );
     }
 	

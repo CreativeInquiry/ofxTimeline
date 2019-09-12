@@ -116,7 +116,7 @@ ofxTimeline::~ofxTimeline(){
 	}
 }
 
-void ofxTimeline::setup(){
+void ofxTimeline::setup(const string& dataPathRoot){
 
     //TODO: error if isSetup...
 
@@ -154,7 +154,11 @@ void ofxTimeline::setup(){
 	zoomer->setTimeline(this);
 	zoomer->setDrawRect(ofRectangle(offset.y, ticker->getBottomEdge(), width, ZOOMER_HEIGHT));
 
-	colors.load();
+	//Update the data paths
+	defaultPalettePath = dataPathRoot + "defaultColorPalette.png";
+	fontPath = dataPathRoot + "NewMedia Fett.ttf";
+
+	colors.load(dataPathRoot + "defaultColors.xml");
 
 	enable();
 
@@ -324,7 +328,7 @@ void ofxTimeline::setShowZoomer(bool shouldShowZoomer){
 }
 
 void ofxTimeline::setupFont(){
-	font.loadFont(fontPath, fontSize);
+	font.load(fontPath, fontSize);
 }
 
 void ofxTimeline::setupFont(string newFontPath, int newFontSize){
@@ -657,6 +661,11 @@ void ofxTimeline::setFrameRate(float fps){
 	timecode.setFPS(fps);
 }
 
+float ofxTimeline::getFrameRate(){
+    return timecode.getFPS();
+}
+
+
 void ofxTimeline::setFrameBased(bool frameBased){
     isFrameBased = frameBased;
 }
@@ -894,12 +903,6 @@ void ofxTimeline::setDurationInFrames(int frames){
 
 void ofxTimeline::setDurationInSeconds(float seconds){
 
-	bool updateInTime = inoutRange.min > 0.;
-	bool updateOutTime = inoutRange.max < 1.;
-
-	float inTimeSeconds  = getInTimeInSeconds();
-	float outTimeSeconds = getOutTimeInSeconds();
-
 	if(seconds <= 0.){
     	ofLogError("ofxTimeline::setDurationInSeconds") << " Duration must set a positive number";
         return;
@@ -907,6 +910,11 @@ void ofxTimeline::setDurationInSeconds(float seconds){
 	//verify no elements are being truncated
 	durationInSeconds = MAX(seconds, getLatestTime()/1000.0);
 
+	bool updateInTime = inoutRange.min > 0.;
+	bool updateOutTime = inoutRange.max < 1.;
+
+	float inTimeSeconds  = getInTimeInSeconds();
+	float outTimeSeconds = getOutTimeInSeconds();
 
 	if(updateInTime){
 		setInPointAtSeconds(inTimeSeconds);
@@ -1552,7 +1560,7 @@ void ofxTimeline::draw(){
 		ofEnableAlphaBlending();
 
         ofSetColor(colors.guiBackgroundColor);
-		ofRect(totalDrawRect);
+		ofDrawRectangle(totalDrawRect);
 
 		ofSetColor(255);
 
@@ -1582,19 +1590,19 @@ void ofxTimeline::draw(){
 #pragma mark ELEMENT CREATORS/GETTERS/SETTERS
 void ofxTimeline::addPage(string pageName, bool makeCurrent){
 	if(pageName == ""){
-		ofLogError("ofxTimeline -- Cannot add page with an empty name.");
+		ofLogError(__FUNCTION__) << "Cannot add page with an empty name";
 		return;
 	}
 
 	for(int i = 0; i < pages.size(); i++){
 		if(pageName == pages[i]->getName()){
-			ofLogError("ofxTimeline -- Page " + pageName + " already exists");
+			ofLogError(__FUNCTION__) << "Page " << pageName << " already exists";
 			return;
 		}
 	}
 
 	ofxTLPage* newPage = new ofxTLPage();
-    newPage->timeline = this;
+	newPage->timeline = this;
 	newPage->setName(pageName);
 	newPage->setup();
 	newPage->setZoomBounds(zoomer->getViewRange());
@@ -1798,7 +1806,7 @@ ofxTLCurves* ofxTimeline::addCurves(string trackName, string xmlFileName, ofRang
 
 float ofxTimeline::getValueAtPercent(string trackName, float atPercent){
 	if(!hasTrack(trackName)){
-		ofLogError("ofxTimeline -- Couldn't find track " + trackName);
+		ofLogError(__FUNCTION__) << "Couldn't find track " << trackName;
 		return 0.0;
 	}
 	ofxTLCurves* curves = (ofxTLCurves*)trackNameToPage[trackName]->getTrack(trackName);
@@ -1807,7 +1815,7 @@ float ofxTimeline::getValueAtPercent(string trackName, float atPercent){
 
 float ofxTimeline::getValue(string trackName, float atTime){
 	if(!hasTrack(trackName)){
-		ofLogError("ofxTimeline -- Couldn't find track " + trackName);
+		ofLogError(__FUNCTION__) << "Couldn't find track " << trackName;
 		return 0.0;
 	}
 	ofxTLCurves* curves = (ofxTLCurves*)trackNameToPage[trackName]->getTrack(trackName);
@@ -1816,7 +1824,7 @@ float ofxTimeline::getValue(string trackName, float atTime){
 
 float ofxTimeline::getValue(string trackName){
 	if(!hasTrack(trackName)){
-		ofLogError("ofxTimeline -- Couldn't find track " + trackName);
+		ofLogError(__FUNCTION__) << "Couldn't find track " << trackName;
 		return 0.0;
 	}
 	ofxTLCurves* curves = (ofxTLCurves*)trackNameToPage[trackName]->getTrack(trackName);
@@ -1842,22 +1850,22 @@ bool ofxTimeline::hasPage(string pageName){
 
 ofxTLTrack* ofxTimeline::getTrack(string trackName){
 	if(!hasTrack(trackName)){
-		ofLogError("ofxTimeline -- Couldn't find track " + trackName);
-		return NULL;
+		ofLogError(__FUNCTION__) << "Couldn't find track " << trackName;
+		return nullptr;
 	}
 	return trackNameToPage[trackName]->getTrack(trackName);
 }
 
 ofxTLPage* ofxTimeline::getPage(string pageName){
 
-	for(vector<ofxTLPage*>::iterator it =  pages.begin(); it != pages.end(); it++){
+	for(vector<ofxTLPage*>::iterator it =  pages.begin(); it != pages.end(); ++it){
         if((*it)->getName() == pageName){
             return (*it);
         }
     }
 
-    ofLogError("ofxTimeline -- Couldn't find page " + pageName);
-    return NULL;
+	ofLogError(__FUNCTION__) << "Couldn't find page " << pageName;
+    return nullptr;
 }
 
 
@@ -2129,7 +2137,7 @@ void ofxTimeline::bringTrackToBottom(ofxTLTrack* track){
 void ofxTimeline::removeTrack(string name){
     ofxTLTrack* track = getTrack(name);
     if(track == NULL){
-        ofLogError() << "ofxTimeline::removeTrack -- Could not find track " << name << " to remove " << endl;
+        ofLogError(__FUNCTION__) << "Could not find track " << name << " to remove";
         return;
 	}
     if(track == modalTrack){
@@ -2144,7 +2152,7 @@ void ofxTimeline::removeTrack(string name){
         for(int q = undoStack[i].size()-1; q >= 0; q--){
 			if(undoStack[i][q].track == track){
                 undoStack[i].erase(undoStack[i].begin() + q);
-                cout << "temporary fix -- deleting undo queue element for track " << track->getName() << endl;
+                //cout << "temporary fix -- deleting undo queue element for track " << track->getName() << endl;
             }
         }
     }
