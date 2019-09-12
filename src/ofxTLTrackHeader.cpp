@@ -49,7 +49,7 @@ void ofxTLTrackHeader::enable(){
 		nameField.setFont(timeline->getFont());
 		//nameField.drawBounds = false;
 		ofxTLTrack::enable();
-    	ofAddListener(nameField.textChanged, this, &ofxTLTrackHeader::textFieldEnter);
+    	ofAddListener(nameField.onTextChange, this, &ofxTLTrackHeader::textFieldEnter);
 	}
 }
 
@@ -57,7 +57,7 @@ void ofxTLTrackHeader::disable(){
 	if(isEnabled()){
 		ofxTLTrack::disable();
 		nameField.disable();
-	    ofRemoveListener(nameField.textChanged, this, &ofxTLTrackHeader::textFieldEnter);
+	    ofRemoveListener(nameField.onTextChange, this, &ofxTLTrackHeader::textFieldEnter);
 	}
 }
 
@@ -108,19 +108,19 @@ void ofxTLTrackHeader::draw(){
 
 	// TODO: set these somewhere else instead of setting it every frame here
     // set name if it's empty and we're not editing
-    if(nameField.text != track->getDisplayName() && !nameField.getIsEnabled()){
+    if(nameField.text != track->getDisplayName() && !nameField.isEditing()){
     	nameField.text = track->getDisplayName();
     }
 
-	if(timeline->areHeadersEditable() && !nameField.getIsEnabled()){
+	if(timeline->areHeadersEditable() && !nameField.isEditing()){
 		nameField.enable();
 	}
 
-	if(!timeline->areHeadersEditable() && nameField.getIsEnabled()){
+	if(!timeline->areHeadersEditable() && nameField.isEditing()){
 		nameField.disable();
 	}
 
-    if(nameField.getIsEditing()){
+    if(nameField.isEditing()){
     	track->getTimeline()->presentedModalContent(this);
     }
 
