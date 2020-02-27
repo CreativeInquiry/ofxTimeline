@@ -12,7 +12,7 @@ fi
 
 ${PREFIX}YCAMInterlab/ofxTimecode.git
 
-${PREFIX}obviousjim/ofxTween.git
+${PREFIX}arturoc/ofxEasing.git
 
 ${PREFIX}obviousjim/ofxMSATimer.git
 
